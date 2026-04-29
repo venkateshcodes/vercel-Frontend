@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sanskaram University | Inter-disciplinary conference 2026</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-left">
+                <a href="index.html" class="nav-logo">
+                    <img src="images/logo3.png" alt="Sanskaram University Logo" class="nav-logo-img" onerror="this.src='https://placehold.co/42x42/0B3D91/F4C542?text=SU'">
+                    <span class="nav-logo-text">SUIDC-2026</span>
+                </a>
+            </div>
+            
+            <div class="nav-center">
+                <ul class="nav-links">
+                    <li><a href="index.html" class="active">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="#schedule">Schedule</a></li>
+                    <li><a href="#speakers">Speakers</a></li>
+                    <li><a href="#contact">Contact</a></li>                    
+                </ul>
+            </div>
+            
+            <div class="nav-right">
+                <a href="register.html" class="nav-btn nav-btn-primary">Register</a>
+                <a href="login.html" class="nav-btn nav-btn-outline">Login</a>
+            </div>
+            
+            <div class="nav-toggle" id="navToggle">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-bg-parallax"></div>
+        
+        <div class="hero-content">
+            <div class="hero-badge" data-aos="fade-down">
+                <i class="fas fa-calendar-alt"></i>
+                <span>April 20-22, 2026</span>
+            </div>
+
+           <!-- <div class="hero-logo" data-aos="fade-up">
+                <h2 class="hero-text-logo">Sanskaram University</h2>
+            </div> -->
+                        
+            <div class="hero-title" data-aos="fade-up" data-aos-delay="200">
+                <h1>Inter-disciplinary conference<br>on Research & Innovation</h1>
+                <span class="hero-subtitle">IDCRI 2026</span>
+            </div>
+            
+            <div class="hero-tagline" data-aos="fade-up" data-aos-delay="300">
+                "Empowering Knowledge, Inspiring Innovation"
+            </div>
+            
+            <div class="hero-location" data-aos="fade-up" data-aos-delay="400">
+                <i class="fas fa-map-marker-alt"></i> Sanskaram University Campus & Virtual Platform
+            </div>
+            
+            <div class="hero-buttons" data-aos="fade-up" data-aos-delay="500">
+                <a href="register.html" class="btn btn-accent">
+                    <i class="fas fa-user-plus"></i> Register Now
+                </a>
+                <a href="login.html" class="btn btn-outline">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </a>
+                <a href="#about" class="btn btn-outline-secondary">
+                    <i class="fas fa-info-circle"></i> Learn More
+                </a>
+            </div>
+            
+            <!-- Countdown Timer -->
+            <div class="countdown-wrapper" data-aos="fade-up" data-aos-delay="600">
+                <h3><i class="fas fa-hourglass-half"></i> Conference Starts In</h3>
+                <div class="countdown-timer" id="countdown">
+                    <div class="countdown-item glass-card">
+                        <span class="countdown-number" id="days">00</span>
+                        <span class="countdown-label">Days</span>
+                    </div>
+                    <div class="countdown-item glass-card">
+                        <span class="countdown-number" id="hours">00</span>
+                        <span class="countdown-label">Hours</span>
+                    </div>
+                    <div class="countdown-item glass-card">
+                        <span class="countdown-number" id="minutes">00</span>
+                        <span class="countdown-label">Minutes</span>
+                    </div>
+                    <div class="countdown-item glass-card">
+                        <span class="countdown-number" id="seconds">00</span>
+                        <span class="countdown-label">Seconds</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="scroll-indicator">
+            <div class="mouse"></div>
+        </div>
+    </section>
+    
+    <!-- Features Section -->
+    <section class="section" id="about">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">Why Attend IDCRI 2026?</h2>
+            <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">Join us for an exceptional academic experience at Sanskaram University</p>
+            
+            <div class="features-grid">
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-icon">
+                        <i class="fas fa-microphone-alt"></i>
+                    </div>
+                    <h3>Expert Speakers</h3>
+                    <p>Learn from renowned scholars and industry leaders from around the world</p>
+                </div>
+                
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-icon">
+                        <i class="fas fa-chalkboard-user"></i>
+                    </div>
+                    <h3>Paper Presentation</h3>
+                    <p>Present your research and get valuable feedback from peers and experts</p>
+                </div>
+                
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="feature-icon">
+                        <i class="fas fa-network-wired"></i>
+                    </div>
+                    <h3>Networking</h3>
+                    <p>Connect with researchers, academicians, and industry professionals</p>
+                </div>
+                
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="500">
+                    <div class="feature-icon">
+                        <i class="fas fa-certificate"></i>
+                    </div>
+                    <h3>Certificate</h3>
+                    <p>Receive participation and presentation certificates</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Schedule Preview Section -->
+    <section class="section schedule-preview" id="schedule">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">Conference Schedule</h2>
+            <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">Three days of knowledge sharing and innovation</p>
+            
+            <div class="schedule-tabs" data-aos="fade-up" data-aos-delay="200">
+                <div class="tab-buttons">
+                    <button class="tab-btn active" data-day="day1">Day 1 - April 20</button>
+                    <button class="tab-btn" data-day="day2">Day 2 - April 21</button>
+                    <button class="tab-btn" data-day="day3">Day 3 - April 22</button>
+                </div>
+                
+                <div class="schedule-content" id="scheduleContent">
+                    <!-- Day 1 Schedule -->
+                    <div class="schedule-day" id="day1">
+                        <div class="schedule-item">
+                            <div class="schedule-time">09:00 - 10:00</div>
+                            <div class="schedule-details">
+                                <div class="schedule-title">Inaugural Ceremony</div>
+                                <div class="schedule-speaker">Chief Guest: Dr. A.P.J. Kalam Memorial Lecture</div>
+                                <div class="schedule-location"><i class="fas fa-location-dot"></i> Main Auditorium</div>
+                            </div>
+                        </div>
+                        
+                        <div class="schedule-item">
+                            <div class="schedule-time">10:00 - 12:00</div>
+                            <div class="schedule-details">
+                                <div class="schedule-title">Keynote Session: Future of Research & Innovation</div>
+                                <div class="schedule-speaker">Prof. Sarah Johnson, MIT</div>
+                                <div class="schedule-location"><i class="fas fa-location-dot"></i> Conference Hall A</div>
+                            </div>
+                        </div>
+                        
+                        <div class="schedule-item">
+                            <div class="schedule-time">13:00 - 16:00</div>
+                            <div class="schedule-details">
+                                <div class="schedule-title">Technical Sessions - Paper Presentations</div>
+                                <div class="schedule-speaker">Multiple Tracks (Engineering, Science, Management)</div>
+                                <div class="schedule-location"><i class="fas fa-location-dot"></i> Various Venues</div>
+                            </div>
+                        </div>
+                        
+                        <div class="schedule-item">
+                            <div class="schedule-time">16:30 - 18:00</div>
+                            <div class="schedule-details">
+                                <div class="schedule-title">Panel Discussion: Industry-Academia Collaboration</div>
+                                <div class="schedule-speaker">Industry Leaders Panel</div>
+                                <div class="schedule-location"><i class="fas fa-location-dot"></i> Conference Hall B</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Day 2 Schedule -->
+                    <div class="schedule-day" id="day2" style="display: none;">
+                        <div class="schedule-item">
+                            <div class="schedule-time">09:00 - 11:00</div>
+                            <div class="schedule-details">
+                                <div class="schedule-title">Workshop: Research Methodology & Publication Ethics</div>
+                                <div class="schedule-speaker">Dr. James Wilson, Elsevier</div>
+                                <div class="schedule-location"><i class="fas fa-location-dot"></i> Workshop Room 1</div>
+                            </div>
+                        </div>
+                        
+                        <div class="schedule-item">
+                            <div class="schedule-time">11:00 - 13:00</div>
+                            <div class="schedule-details">
+                                <div class="schedule-title">Poster Presentation Session</div>
+                                <div class="schedule-speaker">Research Scholars</div>
+                                <div class="schedule-location"><i class="fas fa-location-dot"></i> Exhibition Hall</div>
+                            </div>
+                        </div>
+                        
+                        <div class="schedule-item">
+                            <div class="schedule-time">14:00 - 16:00</div>
+                            <div class="schedule-details">
+                                <div class="schedule-title">Technical Sessions - Parallel Tracks</div>
+                                <div class="schedule-speaker">Selected Research Papers</div>
+                                <div class="schedule-location"><i class="fas fa-location-dot"></i> Multiple Venues</div>
+                            </div>
+                        </div>
+                        
+                        <div class="schedule-item">
+                            <div class="schedule-time">16:00 - 17:30</div>
+                            <div class="schedule-details">
+                                <div class="schedule-title">Cultural Program & University Tour</div>
+                                <div class="schedule-speaker">Sanskaram Cultural Committee</div>
+                                <div class="schedule-location"><i class="fas fa-location-dot"></i> Cultural Center</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Day 3 Schedule -->
+                    <div class="schedule-day" id="day3" style="display: none;">
+                        <div class="schedule-item">
+                            <div class="schedule-time">09:00 - 11:00</div>
+                            <div class="schedule-details">
+                                <div class="schedule-title">Industry-Academia Meet & Career Fair</div>
+                                <div class="schedule-speaker">Partner Companies & Recruiters</div>
+                                <div class="schedule-location"><i class="fas fa-location-dot"></i> Exhibition Hall</div>
+                            </div>
+                        </div>
+                        
+                        <div class="schedule-item">
+                            <div class="schedule-time">11:00 - 13:00</div>
+                            <div class="schedule-details">
+                                <div class="schedule-title">Best Paper Awards & Valedictory Session</div>
+                                <div class="schedule-speaker">Chief Guest & Dignitaries</div>
+                                <div class="schedule-location"><i class="fas fa-location-dot"></i> Main Auditorium</div>
+                            </div>
+                        </div>
+                        
+                        <div class="schedule-item">
+                            <div class="schedule-time">14:00 - 17:00</div>
+                            <div class="schedule-details">
+                                <div class="schedule-title">Networking Lunch & Cultural Exchange</div>
+                                <div class="schedule-speaker">All Participants</div>
+                                <div class="schedule-location"><i class="fas fa-location-dot"></i> Conference Lawn</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center" data-aos="fade-up" data-aos-delay="300">
+                <a href="#schedule" class="btn btn-primary">View Full Schedule <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Venue Section -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">Conference Venue</h2>
+            <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">Sanskaram University - A premier institution for higher education</p>
+            
+            <div class="venue-grid">
+                <div class="venue-info" data-aos="fade-right" data-aos-delay="200">
+                    <h3>Sanskaram University Main Campus</h3>
+                    <p>Sanskaram University is located in the heart of the city, easily accessible and equipped with state-of-the-art facilities for conferences and events.</p>
+                    
+                    <ul class="venue-features">
+                        <li><i class="fas fa-check-circle"></i> 500+ Seater Auditorium</li>
+                        <li><i class="fas fa-check-circle"></i> Modern Seminar Halls</li>
+                        <li><i class="fas fa-check-circle"></i> Wi-Fi Enabled Campus</li>
+                        <li><i class="fas fa-check-circle"></i> Parking Facilities</li>
+                        <li><i class="fas fa-check-circle"></i> Accommodation Available</li>
+                        <li><i class="fas fa-check-circle"></i> Virtual Participation Option</li>
+                    </ul>                    
+                    
+                    <a href="https://www.google.com/maps?q=Sanskaram+University,+VPO+Kheri+Taluka+Patauda,+Jhajjar,+Haryana+124108" class="btn btn-primary">
+                        <i class="fas fa-directions"></i> Get Directions
+                    </a>
+                </div>
+                
+                <div class="map-wrapper" data-aos="fade-left" data-aos-delay="200">
+                    <img src="images/SU 02.jpg" alt="Campus Map">
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Speakers Section -->
+    <section class="speakers-section" id="speakers">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">Keynote Speakers</h2>
+            <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">Meet our distinguished speakers from around the world</p>
+            
+            <div class="speakers-grid">
+                <div class="speaker-card" data-aos="fade-up" data-aos-delay="200">
+                    <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Dr. Sarah Johnson" class="speaker-image">
+                    <div class="speaker-info">
+                        <h3 class="speaker-name">Dr. Sarah Johnson</h3>
+                        <div class="speaker-title">Professor, MIT</div>
+                        <p class="speaker-bio">Leading researcher in Artificial Intelligence and Machine Learning with over 15 years of experience.</p>
+                        <div class="speaker-social">
+                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-google-scholar"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="speaker-card" data-aos="fade-up" data-aos-delay="300">
+                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Prof. David Chen" class="speaker-image">
+                    <div class="speaker-info">
+                        <h3 class="speaker-name">Prof. David Chen</h3>
+                        <div class="speaker-title">Stanford University</div>
+                        <p class="speaker-bio">Expert in Sustainable Technologies and Green Energy, published over 100 research papers.</p>
+                        <div class="speaker-social">
+                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-google-scholar"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="speaker-card" data-aos="fade-up" data-aos-delay="400">
+                    <img src="https://randomuser.me/api/portraits/women/45.jpg" alt="Dr. Priya Sharma" class="speaker-image">
+                    <div class="speaker-info">
+                        <h3 class="speaker-name">Dr. Priya Sharma</h3>
+                        <div class="speaker-title">IIT Delhi</div>
+                        <p class="speaker-bio">Specialist in Data Science and Business Analytics, award-winning researcher and educator.</p>
+                        <div class="speaker-social">
+                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-google-scholar"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Sponsors Section 
+    <section class="sponsors-section">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">Our Sponsors & Partners</h2>
+            <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">Supported by leading organizations</p>
+            
+            <div class="sponsors-slider" data-aos="fade-up" data-aos-delay="200">
+                <div class="sponsors-track">
+                    <div class="sponsor-card">
+                        <img src="https://placehold.co/120x80/0A2A66/F4B400?text=Tech+Corp" alt="Tech Corp">
+                        <div class="sponsor-name">Tech Corp</div>
+                    </div>
+                    <div class="sponsor-card">
+                        <img src="https://placehold.co/120x80/0A2A66/F4B400?text=Research+Fdn" alt="Research Foundation">
+                        <div class="sponsor-name">Research Foundation</div>
+                    </div>
+                    <div class="sponsor-card">
+                        <img src="https://placehold.co/120x80/0A2A66/F4B400?text=Innovation+Hub" alt="Innovation Hub">
+                        <div class="sponsor-name">Innovation Hub</div>
+                    </div>
+                    <div class="sponsor-card">
+                        <img src="https://placehold.co/120x80/0A2A66/F4B400?text=Global+Ed" alt="Global Ed Council">
+                        <div class="sponsor-name">Global Ed Council</div>
+                    </div>
+                    <div class="sponsor-card">
+                        <img src="https://placehold.co/120x80/0A2A66/F4B400?text=Tech+Corp" alt="Tech Corp">
+                        <div class="sponsor-name">Tech Corp</div>
+                    </div>
+                    <div class="sponsor-card">
+                        <img src="https://placehold.co/120x80/0A2A66/F4B400?text=Research+Fdn" alt="Research Foundation">
+                        <div class="sponsor-name">Research Foundation</div>
+                    </div>
+                    <div class="sponsor-card">
+                        <img src="https://placehold.co/120x80/0A2A66/F4B400?text=Innovation+Hub" alt="Innovation Hub">
+                        <div class="sponsor-name">Innovation Hub</div>
+                    </div>
+                    <div class="sponsor-card">
+                        <img src="https://placehold.co/120x80/0A2A66/F4B400?text=Global+Ed" alt="Global Ed Council">
+                        <div class="sponsor-name">Global Ed Council</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section> -->
+    
+    <!-- Newsletter Section -->
+    <section class="newsletter" id="contact">
+        <div class="container">
+            <div class="newsletter-wrapper" data-aos="fade-up">
+                <div class="newsletter-icon">
+                    <i class="fas fa-envelope-open-text"></i>
+                </div>
+                <h3>Stay Updated</h3>
+                <p>Subscribe to our newsletter for conference updates and announcements</p>
+                
+                <form class="newsletter-form" id="newsletterForm">
+                    <input type="email" placeholder="Enter your email address" required>
+                    <button type="submit" class="btn-accent">
+                        <i class="fas fa-paper-plane"></i> Subscribe
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3><i class="fas fa-university"></i> Sanskaram University</h3>
+                    <p>Empowering Knowledge, Inspiring Innovation</p>
+                    <p style="margin-top: 1rem;">
+                        <i class="fas fa-map-marker-alt"></i> VPO Kheri Taluka Patauda, Jhajjar<br>
+                        Haryana - 124108, NH 352,<br>
+                        India
+                    </p>                    
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#about">About Conference</a></li>
+                        <li><a href="register.html">Register Now</a></li>
+                        <li><a href="login.html">Participant Login</a></li>
+                    <!--<li><a href="#">Call for Papers</a></li>
+                        <li><a href="#">Important Dates</a></li> -->
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Contact Us</h3>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-phone"></i> +91 123 456 7890</li>
+                        <li><i class="fas fa-envelope"></i> conference@sanskaram.edu</li>
+                        <li><i class="fas fa-globe"></i> www.sanskaram.edu/conference</li>
+                    </ul>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2026 Sanskaram University. All rights reserved. | Inter-disciplinary conference on Research & Innovation</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

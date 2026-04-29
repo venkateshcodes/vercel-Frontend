@@ -1,0 +1,358 @@
+/* ========================================
+   AUTHENTICATION PAGES - PROFESSIONAL CLEAN DESIGN
+   Login & Registration | Sanskaram Conference 2026
+   No Scroll - Compact & Professional
+   ======================================== */
+
+/* Auth Container - Full Page with Gradient */
+.auth-container {
+    min-height: 100vh;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #0B3D91 0%, #062C6E 100%);
+    position: relative;
+    padding: 1rem;
+    overflow: hidden;
+}
+
+/* Simple Background Orbs - Subtle */
+.auth-container::before {
+    content: '';
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(244, 197, 66, 0.08) 0%, transparent 70%);
+    border-radius: 50%;
+    top: -200px;
+    right: -200px;
+}
+
+.auth-container::after {
+    content: '';
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(244, 197, 66, 0.05) 0%, transparent 70%);
+    border-radius: 50%;
+    bottom: -250px;
+    left: -250px;
+}
+
+/* Auth Card - Compact & Clean */
+.auth-card {
+    background: #FFFFFF;
+    border-radius: 28px;
+    padding: 2rem 2.5rem;
+    width: 100%;
+    max-width: 480px;
+    box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.15);
+    position: relative;
+    z-index: 1;
+    transition: box-shadow 0.3s ease;
+}
+
+/* Icon Header - Compact */
+.auth-icon {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.auth-icon i {
+    font-size: 2.5rem;
+    background: #0B3D91;
+    padding: 0.875rem;
+    border-radius: 50px;
+    color: #F4C542;
+    box-shadow: 0 4px 12px -4px rgba(0, 0, 0, 0.1);
+}
+
+/* Typography - Tighter Spacing */
+.auth-card h1 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 0.35rem;
+    color: #0B3D91;
+}
+
+.auth-card > p {
+    text-align: center;
+    color: #6B7280;
+    margin-bottom: 1.5rem;
+    font-size: 0.85rem;
+}
+
+/* Form Groups - Compact */
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+    color: #374151;
+    font-size: 0.8rem;
+}
+
+.form-group label i {
+    color: #F4C542;
+    width: 16px;
+    font-size: 0.8rem;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1.5px solid #E5E7EB;
+    border-radius: 12px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    background: #FFFFFF;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #F4C542;
+    box-shadow: 0 0 0 3px rgba(244, 197, 66, 0.1);
+}
+
+.form-group input::placeholder {
+    color: #9CA3AF;
+    font-size: 0.85rem;
+}
+
+/* Button Styles - Compact */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 12px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: none;
+    margin-top: 0.5rem;
+}
+
+.btn-primary {
+    background: #0B3D91;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #3A7BD5;
+    transform: translateY(-1px);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+.btn-accent {
+    background: #F4C542;
+    color: #0B3D91;
+}
+
+.btn-accent:hover {
+    background: #FFD97A;
+    transform: translateY(-1px);
+}
+
+/* Alert Messages - Compact */
+.alert {
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+}
+
+.alert-error {
+    background: #FEF2F2;
+    color: #DC2626;
+    border-left: 4px solid #DC2626;
+}
+
+.alert-success {
+    background: #ECFDF5;
+    color: #059669;
+    border-left: 4px solid #059669;
+}
+
+.alert i {
+    font-size: 0.9rem;
+}
+
+/* Footer Links - Compact */
+.auth-footer {
+    margin-top: 1.25rem;
+    text-align: center;
+    padding-top: 1rem;
+    border-top: 1px solid #E5E7EB;
+}
+
+.auth-footer p {
+    margin: 0;
+    font-size: 0.8rem;
+    color: #6B7280;
+}
+
+.auth-footer a {
+    color: #F4C542;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s ease;
+}
+
+.auth-footer a:hover {
+    color: #C49B2A;
+    text-decoration: underline;
+}
+
+/* Responsive Design - No Scroll */
+@media (max-width: 640px) {
+    .auth-card {
+        padding: 1.5rem;
+        max-width: 95%;
+        border-radius: 24px;
+    }
+    
+    .auth-card h1 {
+        font-size: 1.4rem;
+    }
+    
+    .auth-icon i {
+        font-size: 2rem;
+        padding: 0.7rem;
+    }
+    
+    .form-group input {
+        padding: 0.65rem 0.875rem;
+        font-size: 0.85rem;
+    }
+    
+    .form-group label {
+        font-size: 0.75rem;
+    }
+    
+    .btn {
+        padding: 0.65rem 1.25rem;
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .auth-container {
+        padding: 0.75rem;
+    }
+    
+    .auth-card {
+        padding: 1.25rem;
+        border-radius: 20px;
+    }
+    
+    .auth-card h1 {
+        font-size: 1.3rem;
+        margin-bottom: 0.25rem;
+    }
+    
+    .auth-card > p {
+        font-size: 0.75rem;
+        margin-bottom: 1.25rem;
+    }
+    
+    .auth-icon {
+        margin-bottom: 0.75rem;
+    }
+    
+    .auth-icon i {
+        font-size: 1.8rem;
+        padding: 0.6rem;
+    }
+    
+    .form-group {
+        margin-bottom: 0.875rem;
+    }
+    
+    .form-group input {
+        padding: 0.6rem 0.75rem;
+        font-size: 0.8rem;
+    }
+    
+    .btn {
+        padding: 0.6rem 1rem;
+        margin-top: 0.35rem;
+    }
+    
+    .auth-footer {
+        margin-top: 1rem;
+        padding-top: 0.875rem;
+    }
+    
+    .auth-footer p {
+        font-size: 0.7rem;
+    }
+}
+
+/* Ensure no overflow on body */
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* Optional: For very short screens */
+@media (max-height: 700px) {
+    .auth-card {
+        padding: 1.25rem 2rem;
+    }
+    
+    .auth-icon {
+        margin-bottom: 0.5rem;
+    }
+    
+    .auth-icon i {
+        font-size: 2rem;
+        padding: 0.6rem;
+    }
+    
+    .auth-card h1 {
+        font-size: 1.4rem;
+        margin-bottom: 0.2rem;
+    }
+    
+    .auth-card > p {
+        margin-bottom: 1rem;
+    }
+    
+    .form-group {
+        margin-bottom: 0.75rem;
+    }
+    
+    .form-group input {
+        padding: 0.6rem 0.875rem;
+    }
+    
+    .btn {
+        margin-top: 0.25rem;
+        padding: 0.6rem 1.25rem;
+    }
+    
+    .auth-footer {
+        margin-top: 0.875rem;
+        padding-top: 0.75rem;
+    }
+}

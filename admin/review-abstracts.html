@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review Abstracts - Conference 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0B3D91;
+            --accent: #FFD700;
+            --success: #10B981;
+            --danger: #EF4444;
+            --warning: #F59E0B;
+            --border: #E5E7EB;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #F9FAFB;
+        }
+        .app-container { display: flex; min-height: 100vh; }
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, #0B3D91 0%, #1a1a4e 100%);
+            color: white;
+            padding: 32px;
+            position: fixed;
+            height: 100vh;
+        }
+        .sidebar-header { text-align: center; margin-bottom: 32px; padding-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.2); }
+        .sidebar-header h2 { font-size: 1.5rem; margin-top: 8px; }
+        .sidebar-nav { display: flex; flex-direction: column; gap: 8px; }
+        .nav-item {
+            padding: 12px 20px;
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .nav-item:hover, .nav-item.active { background: rgba(255,215,0,0.2); color: #FFD700; }
+        .main-content { flex: 1; margin-left: 280px; }
+        .top-bar {
+            background: white;
+            padding: 20px 40px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            margin: 32px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .card-title {
+            font-size: 1.25rem;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 12px;
+            margin: 0 4px;
+            transition: all 0.3s;
+        }
+        .btn-success { background: var(--success); color: white; }
+        .btn-danger { background: var(--danger); color: white; }
+        .btn-warning { background: var(--warning); color: white; }
+        .btn-outline { background: transparent; border: 1px solid var(--border); }
+        .btn-sm { padding: 6px 12px; font-size: 12px; }
+        .btn:hover { transform: translateY(-2px); opacity: 0.9; }
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .status-pending { background: #FEF3C7; color: #D97706; }
+        .status-approved { background: #D1FAE5; color: #059669; }
+        .status-rejected { background: #FEE2E2; color: #DC2626; }
+        .status-unlocked { background: #DBEAFE; color: #1E40AF; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 16px; text-align: left; border-bottom: 1px solid var(--border); }
+        .logout-btn {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .alert {
+            padding: 12px;
+            border-radius: 8px;
+            margin: 20px 32px 0 32px;
+            display: none;
+            animation: slideDown 0.3s ease;
+        }
+        @keyframes slideDown {
+            from { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .alert-success { background: #D1FAE5; color: #059669; border-left: 4px solid #059669; }
+        .alert-error { background: #FEE2E2; color: #DC2626; border-left: 4px solid #DC2626; }
+        .alert-info { background: #DBEAFE; color: #1E40AF; border-left: 4px solid #1E40AF; }
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .filter-buttons {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+        .filter-btn {
+            padding: 8px 20px;
+            border: 2px solid var(--border);
+            background: white;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .filter-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        .abstract-detail {
+            background: #F9FAFB;
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 16px;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: white;
+            padding: 32px;
+            border-radius: 12px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .close-modal {
+            float: right;
+            cursor: pointer;
+            font-size: 24px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-crown" style="font-size: 32px; color: var(--accent);"></i>
+                <h2>Admin Panel</h2>
+                <p>Sanskaram Conference 2026</p>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                <a href="review-abstracts.html" class="nav-item active"><i class="fas fa-file-alt"></i> Review Abstracts</a>
+                <a href="schedule-management.html" class="nav-item"><i class="fas fa-calendar-alt"></i> Schedule</a>
+                <a href="payments.html" class="nav-item"><i class="fas fa-credit-card"></i> Payments</a>
+            </nav>
+        </aside>
+        
+        <main class="main-content">
+            <div class="top-bar">
+                <h1><i class="fas fa-clipboard-list"></i> Review Abstracts</h1>
+                <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+            </div>
+            
+            <div id="alert" class="alert"></div>
+            <div id="loading" style="display: none; text-align: center; padding: 40px;">
+                <div class="spinner"></div>
+                <p>Loading abstracts...</p>
+            </div>
+            
+            <div class="card">
+                <div class="filter-buttons">
+                    <button onclick="filterAbstracts('all')" class="filter-btn active" id="filterAll">All</button>
+                    <button onclick="filterAbstracts('pending')" class="filter-btn" id="filterPending">Pending</button>
+                    <button onclick="filterAbstracts('approved')" class="filter-btn" id="filterApproved">Approved</button>
+                    <button onclick="filterAbstracts('rejected')" class="filter-btn" id="filterRejected">Rejected</button>
+                    <button onclick="filterAbstracts('payment_unlocked')" class="filter-btn" id="filterUnlocked">Payment Unlocked</button>
+                </div>
+                
+                <div id="content">
+                    <div style="text-align: center; padding: 40px;">
+                        <div class="spinner"></div>
+                        <p>Loading...</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <div id="viewModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+    
+    <div id="unlockModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeUnlockModal()">&times;</span>
+            <h3 style="margin-bottom: 20px;"><i class="fas fa-unlock-alt"></i> Unlock Payment Gateway</h3>
+            <p>Are you sure you want to unlock payment for this abstract?</p>
+            <p style="margin: 16px 0; color: #F59E0B;"><i class="fas fa-exclamation-triangle"></i> This will allow the user to make payment for registration.</p>
+            <div style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 24px;">
+                <button onclick="closeUnlockModal()" class="btn btn-outline">Cancel</button>
+                <button id="confirmUnlockBtn" class="btn btn-warning">Yes, Unlock Payment</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+    const API_URL = 'http://localhost:5000/api';
+    const token = localStorage.getItem('token');
+
+    if (!token) window.location.href = '../login.html';
+
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (!user || user.role !== 'admin') window.location.href = '../login.html';
+
+    let currentFilter = 'all';
+    let allAbstracts = [];
+    let selectedAbstractId = null;
+
+    function logout() {
+        localStorage.clear();
+        window.location.href = '../login.html';
+    }
+
+    function showAlert(message, type) {
+        const alertDiv = document.getElementById('alert');
+        alertDiv.style.display = 'block';
+        alertDiv.className = `alert alert-${type}`;
+        alertDiv.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-triangle' : 'info-circle'}"></i> ${message}`;
+        setTimeout(() => {
+            alertDiv.style.display = 'none';
+        }, 3000);
+    }
+
+    async function loadAbstracts() {
+        const content = document.getElementById('content');
+        const loading = document.getElementById('loading');
+        loading.style.display = 'block';
+        content.innerHTML = '<div style="text-align: center; padding: 40px;"><div class="spinner"></div><p>Loading abstracts...</p></div>';
+
+        try {
+            console.log('Fetching abstracts from admin API...');
+            const res = await fetch(`${API_URL}/admin/abstracts`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            const result = await res.json();
+            console.log('Admin abstracts response:', result);
+            
+            if (result.success) {
+                allAbstracts = result.data;
+                console.log(`Loaded ${allAbstracts.length} abstracts`);
+                filterAbstracts(currentFilter);
+            } else {
+                content.innerHTML = `<p style="color: #DC2626; text-align: center;">${result.message || 'Error loading abstracts'}</p>`;
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            content.innerHTML = `<p style="color: #DC2626; text-align: center;">Error loading abstracts. Please check server connection on port 5000.</p>`;
+        } finally {
+            loading.style.display = 'none';
+        }
+    }
+
+    function filterAbstracts(status) {
+        currentFilter = status;
+        
+        // Update active button
+        document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+        if (status === 'all') document.getElementById('filterAll').classList.add('active');
+        else if (status === 'pending') document.getElementById('filterPending').classList.add('active');
+        else if (status === 'approved') document.getElementById('filterApproved').classList.add('active');
+        else if (status === 'rejected') document.getElementById('filterRejected').classList.add('active');
+        else if (status === 'payment_unlocked') document.getElementById('filterUnlocked').classList.add('active');
+        
+        let filtered = allAbstracts;
+        if (status === 'pending') {
+            filtered = allAbstracts.filter(a => (a.status || 'pending') === 'pending');
+        } else if (status === 'approved') {
+            filtered = allAbstracts.filter(a => a.status === 'approved');
+        } else if (status === 'rejected') {
+            filtered = allAbstracts.filter(a => a.status === 'rejected');
+        } else if (status === 'payment_unlocked') {
+            filtered = allAbstracts.filter(a => a.payment_unlocked === true);
+        }
+
+        const content = document.getElementById('content');
+        
+        if (!filtered.length) {
+            content.innerHTML = `<p style="text-align: center; padding: 40px; color: #6B7280;">No ${status === 'all' ? '' : status} abstracts found</p>`;
+            return;
+        }
+
+        content.innerHTML = `
+            <h2 class="card-title"><i class="fas fa-file-alt"></i> Abstract Submissions (${filtered.length})</h2>
+            <div style="overflow-x: auto;">
+                <table style="width: 100%;">
+                    <thead>
+                        <tr style="background: #F9FAFB;">
+                            <th>Title</th>
+                            <th>Authors</th>
+                            <th>Status</th>
+                            <th>Payment</th>
+                            <th>Submitted</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${filtered.map(a => `
+                            <tr>
+                                <td><strong>${escapeHtml(a.title)}</strong></td>
+                                <td>${escapeHtml(a.authors || 'N/A')}</td>
+                                <td><span class="status-badge status-${a.status || 'pending'}">${(a.status || 'pending').toUpperCase()}</span></td>
+                                <td>
+                                    ${a.status === 'approved' ? 
+                                        (a.payment_unlocked ? 
+                                            '<span class="status-badge status-unlocked"><i class="fas fa-unlock-alt"></i> Unlocked</span>' : 
+                                            '<span style="color: #F59E0B;"><i class="fas fa-lock"></i> Locked</span>'
+                                        ) : 
+                                        '<span style="color: #9CA3AF;">—</span>'
+                                    }
+                                </td>
+                                <td>${a.submitted_at ? new Date(a.submitted_at).toLocaleDateString() : 'N/A'}</td>
+                                <td>
+                                    <button onclick="viewAbstract('${a.id}')" class="btn btn-outline btn-sm"><i class="fas fa-eye"></i> View</button>
+                                    ${(a.status || 'pending') === 'pending' ? `
+                                        <button onclick="approveAbstract('${a.id}')" class="btn btn-success btn-sm"><i class="fas fa-check"></i> Approve</button>
+                                        <button onclick="rejectAbstract('${a.id}')" class="btn btn-danger btn-sm"><i class="fas fa-times"></i> Reject</button>
+                                    ` : ''}
+                                    ${a.status === 'approved' && !a.payment_unlocked ? `
+                                        <button onclick="openUnlockModal('${a.id}')" class="btn btn-warning btn-sm"><i class="fas fa-unlock-alt"></i> Unlock Payment</button>
+                                    ` : ''}
+                                    ${a.payment_unlocked ? `
+                                        <a href="schedule-management.html" class="btn btn-outline btn-sm"><i class="fas fa-calendar-alt"></i> Assign Schedule</a>
+                                    ` : ''}
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            </div>
+        `;
+    }
+
+    function viewAbstract(abstractId) {
+        const abstract = allAbstracts.find(a => a.id === abstractId);
+        if (!abstract) return;
+        
+        const modal = document.getElementById('viewModal');
+        const modalBody = document.getElementById('modalBody');
+        
+        modalBody.innerHTML = `
+            <h3 style="color: var(--primary); margin-bottom: 16px;">${escapeHtml(abstract.title)}</h3>
+            <div class="abstract-detail">
+                <p><strong><i class="fas fa-user"></i> Authors:</strong> ${escapeHtml(abstract.authors || 'N/A')}</p>
+                <p><strong><i class="fas fa-tags"></i> Keywords:</strong> ${escapeHtml(abstract.keywords || 'N/A')}</p>
+                <p><strong><i class="fas fa-calendar"></i> Submitted:</strong> ${abstract.submitted_at ? new Date(abstract.submitted_at).toLocaleString() : 'N/A'}</p>
+                <p><strong><i class="fas fa-tag"></i> Status:</strong> <span class="status-badge status-${abstract.status || 'pending'}">${(abstract.status || 'pending').toUpperCase()}</span></p>
+                ${abstract.payment_unlocked ? `<p><strong><i class="fas fa-unlock-alt"></i> Payment:</strong> <span class="status-badge status-unlocked">Unlocked</span></p>` : ''}
+                ${abstract.payment_completed ? `<p><strong><i class="fas fa-check-circle"></i> Payment:</strong> <span class="status-badge status-approved">Completed</span></p>` : ''}
+            </div>
+            <div style="margin-top: 20px;">
+                <h4><i class="fas fa-align-left"></i> Abstract Content</h4>
+                <div class="abstract-detail" style="white-space: pre-wrap;">${escapeHtml(abstract.abstract_text || abstract.content || 'No content provided')}</div>
+            </div>
+        `;
+        
+        modal.style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('viewModal').style.display = 'none';
+    }
+
+    function openUnlockModal(abstractId) {
+        selectedAbstractId = abstractId;
+        document.getElementById('unlockModal').style.display = 'flex';
+    }
+
+    function closeUnlockModal() {
+        document.getElementById('unlockModal').style.display = 'none';
+        selectedAbstractId = null;
+    }
+
+    async function unlockPayment(abstractId) {
+        console.log('🔓 Unlocking payment for abstract:', abstractId);
+        
+        try {
+            const response = await fetch(`${API_URL}/admin/abstracts/${abstractId}/unlock-payment`, {
+                method: "POST",
+                headers: { 
+                    "Content-Type": "application/json", 
+                    Authorization: `Bearer ${token}` 
+                }
+            });
+            const data = await response.json();
+            console.log('Unlock response:', data);
+
+            if (response.ok && data.success) {
+                showAlert('✅ ' + data.message, 'success');
+                loadAbstracts(); // Refresh the list
+            } else {
+                showAlert(data.message || 'Failed to unlock payment', 'error');
+            }
+        } catch (error) {
+            console.error('Unlock payment error:', error);
+            showAlert('Server error: ' + error.message, 'error');
+        }
+    }
+
+    async function approveAbstract(abstractId) {
+        if (!confirm('Are you sure you want to approve this abstract? Payment will be automatically unlocked.')) return;
+        
+        console.log('✅ Approving abstract:', abstractId);
+        
+        try {
+            const response = await fetch(`${API_URL}/admin/abstracts/${abstractId}/status`, {
+                method: "PUT",
+                headers: { 
+                    "Content-Type": "application/json", 
+                    Authorization: `Bearer ${token}` 
+                },
+                body: JSON.stringify({ status: 'approved' })
+            });
+            const data = await response.json();
+            console.log('Approve response:', data);
+
+            if (response.ok && data.success) {
+                showAlert(data.message || 'Abstract approved successfully!', 'success');
+                loadAbstracts();
+            } else {
+                showAlert(data.message || 'Approval failed', 'error');
+            }
+        } catch (error) {
+            console.error('Approve error:', error);
+            showAlert('Server error. Please try again.', 'error');
+        }
+    }
+
+    async function rejectAbstract(abstractId) {
+        if (!confirm('Are you sure you want to reject this abstract?')) return;
+        
+        console.log('❌ Rejecting abstract:', abstractId);
+        
+        try {
+            const response = await fetch(`${API_URL}/admin/abstracts/${abstractId}/status`, {
+                method: "PUT",
+                headers: { 
+                    "Content-Type": "application/json", 
+                    Authorization: `Bearer ${token}` 
+                },
+                body: JSON.stringify({ status: 'rejected' })
+            });
+            const data = await response.json();
+            console.log('Reject response:', data);
+
+            if (response.ok && data.success) {
+                showAlert(data.message || 'Abstract rejected successfully!', 'success');
+                loadAbstracts();
+            } else {
+                showAlert(data.message || 'Rejection failed', 'error');
+            }
+        } catch (error) {
+            console.error('Reject error:', error);
+            showAlert('Server error. Please try again.', 'error');
+        }
+    }
+    
+    function escapeHtml(str) {
+        if (!str) return '';
+        return String(str).replace(/[&<>]/g, function(m) {
+            return m === '&' ? '&amp;' : m === '<' ? '&lt;' : '&gt;';
+        });
+    }
+
+    // Set up unlock confirmation button
+    document.getElementById('confirmUnlockBtn').onclick = function() {
+        if (selectedAbstractId) {
+            unlockPayment(selectedAbstractId);
+            closeUnlockModal();
+        }
+    };
+
+    // Close modals when clicking outside
+    window.onclick = function(event) {
+        const viewModal = document.getElementById('viewModal');
+        const unlockModal = document.getElementById('unlockModal');
+        if (event.target === viewModal) {
+            viewModal.style.display = 'none';
+        }
+        if (event.target === unlockModal) {
+            unlockModal.style.display = 'none';
+        }
+    }
+
+    loadAbstracts();
+    </script>
+</body>
+</html>

@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedule Management - Conference 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0B3D91;
+            --accent: #FFD700;
+            --success: #10B981;
+            --danger: #EF4444;
+            --warning: #F59E0B;
+            --border: #E5E7EB;
+            --radius-lg: 12px;
+            --space-md: 16px;
+            --space-lg: 24px;
+            --space-xl: 32px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #F9FAFB;
+        }
+        .app-container { display: flex; min-height: 100vh; }
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, #0B3D91 0%, #1a1a4e 100%);
+            color: white;
+            padding: 32px;
+            position: fixed;
+            height: 100vh;
+        }
+        .sidebar-header { text-align: center; margin-bottom: 32px; padding-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.2); }
+        .sidebar-header h2 { font-size: 1.5rem; margin-top: 8px; }
+        .sidebar-nav { display: flex; flex-direction: column; gap: 8px; }
+        .nav-item {
+            padding: 12px 20px;
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .nav-item:hover, .nav-item.active { background: rgba(255,215,0,0.2); color: #FFD700; }
+        .main-content { flex: 1; margin-left: 280px; }
+        .top-bar {
+            background: white;
+            padding: 20px 40px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .card {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            margin: 32px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .card-title {
+            font-size: 1.25rem;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+        }
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-success { background: var(--success); color: white; }
+        .btn-warning { background: var(--warning); color: white; }
+        .btn-outline { background: transparent; border: 1px solid var(--border); }
+        .btn-sm { padding: 6px 12px; font-size: 12px; }
+        .btn:hover { transform: translateY(-2px); opacity: 0.9; }
+        .logout-btn {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .alert {
+            padding: 12px;
+            border-radius: 8px;
+            margin: 20px 32px 0 32px;
+            display: none;
+            animation: slideDown 0.3s ease;
+        }
+        @keyframes slideDown {
+            from { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .alert-success { background: #D1FAE5; color: #059669; border-left: 4px solid #059669; }
+        .alert-error { background: #FEE2E2; color: #DC2626; border-left: 4px solid #DC2626; }
+        .alert-info { background: #DBEAFE; color: #1E40AF; border-left: 4px solid #1E40AF; }
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .status-approved { background: #D1FAE5; color: #059669; }
+        .status-pending { background: #FEF3C7; color: #D97706; }
+        .status-scheduled { background: #DBEAFE; color: #1E40AF; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 16px; text-align: left; border-bottom: 1px solid var(--border); }
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+        .btn-spinner {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 2px solid #fff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s linear infinite;
+            margin-right: 8px;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: white;
+            padding: 32px;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .close-modal {
+            float: right;
+            cursor: pointer;
+            font-size: 24px;
+            color: #999;
+        }
+        .filter-buttons {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+        .filter-btn {
+            padding: 8px 20px;
+            border: 2px solid var(--border);
+            background: white;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .filter-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        .schedule-info {
+            background: #F0FDF4;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+        }
+        .debug-console {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 10px;
+            margin: 10px 32px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 12px;
+            display: none;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-crown" style="font-size: 32px; color: var(--accent);"></i>
+                <h2>Admin Panel</h2>
+                <p>Sanskaram Conference 2026</p>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                <a href="review-abstracts.html" class="nav-item"><i class="fas fa-file-alt"></i> Review Abstracts</a>
+                <a href="schedule-management.html" class="nav-item active"><i class="fas fa-calendar-alt"></i> Schedule</a>
+                <a href="payments.html" class="nav-item"><i class="fas fa-credit-card"></i> Payments</a>
+            </nav>
+        </aside>
+        
+        <main class="main-content">
+            <div class="top-bar">
+                <h1><i class="fas fa-calendar-alt"></i> Schedule Management</h1>
+                <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+            </div>
+            
+            <div id="alert" class="alert"></div>
+            <div id="loading" style="display: none; text-align: center; padding: 40px;">
+                <div class="spinner"></div>
+                <p>Loading approved abstracts...</p>
+            </div>
+            
+            <div class="card">
+                <div class="filter-buttons">
+                    <button onclick="filterAbstracts('all')" class="filter-btn active" id="filterAll">All Approved</button>
+                    <button onclick="filterAbstracts('scheduled')" class="filter-btn" id="filterScheduled">Scheduled</button>
+                    <button onclick="filterAbstracts('unscheduled')" class="filter-btn" id="filterUnscheduled">Unscheduled</button>
+                </div>
+                
+                <div id="content">
+                    <div style="text-align: center; padding: 40px;">
+                        <div class="spinner"></div>
+                        <p>Loading...</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <div id="scheduleModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <h3 style="margin-bottom: 20px;"><i class="fas fa-calendar-plus"></i> Assign Presentation Schedule</h3>
+            <form id="scheduleForm">
+                <input type="hidden" id="scheduleAbstractId">
+                <div class="form-group">
+                    <label><i class="fas fa-calendar-day"></i> Presentation Date *</label>
+                    <input type="date" id="presentationDate" required>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-clock"></i> Presentation Time *</label>
+                    <input type="time" id="presentationTime" required>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-map-marker-alt"></i> Venue</label>
+                    <input type="text" id="venue" placeholder="e.g., Main Hall, Room 101, Online">
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-tv"></i> Mode *</label>
+                    <select id="mode" required>
+                        <option value="online">Online (Zoom/Meet)</option>
+                        <option value="offline">Offline (In Person)</option>
+                        <option value="hybrid">Hybrid</option>
+                    </select>
+                </div>
+                <div class="form-group" id="meetingLinkGroup">
+                    <label><i class="fas fa-video"></i> Meeting Link (for online)</label>
+                    <input type="url" id="meetingLink" placeholder="https://meet.google.com/...">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    <i class="fas fa-save"></i> Save Schedule
+                </button>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+    const API_URL = 'http://localhost:5000/api';
+    const token = localStorage.getItem('token');
+
+    if (!token) window.location.href = '../login.html';
+
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (!user || user.role !== 'admin') window.location.href = '../login.html';
+
+    let currentFilter = 'all';
+    let allAbstracts = [];
+
+    function logout() {
+        localStorage.clear();
+        window.location.href = '../login.html';
+    }
+
+    function showAlert(message, type) {
+        const alertDiv = document.getElementById('alert');
+        alertDiv.style.display = 'block';
+        alertDiv.className = `alert alert-${type}`;
+        alertDiv.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-triangle' : 'info-circle'}"></i> ${message}`;
+        setTimeout(() => {
+            alertDiv.style.display = 'none';
+        }, 5000);
+    }
+
+    // Show/hide meeting link field based on mode selection
+    document.getElementById('mode')?.addEventListener('change', function() {
+        const meetingLinkGroup = document.getElementById('meetingLinkGroup');
+        if (this.value === 'online') {
+            meetingLinkGroup.style.display = 'block';
+        } else {
+            meetingLinkGroup.style.display = 'block'; // Keep visible but optional
+        }
+    });
+
+    async function loadApprovedAbstracts() {
+        const content = document.getElementById('content');
+        const loading = document.getElementById('loading');
+        loading.style.display = 'block';
+        content.innerHTML = '<div style="text-align: center; padding: 40px;"><div class="spinner"></div><p>Loading approved abstracts...</p></div>';
+
+        try {
+            console.log('Fetching approved abstracts from:', `${API_URL}/admin/abstracts`);
+            const res = await fetch(`${API_URL}/admin/abstracts`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            
+            console.log('Response status:', res.status);
+            const result = await res.json();
+            console.log('API Response:', JSON.stringify(result, null, 2));
+            
+            if (result.success) {
+                // Filter only approved abstracts
+                allAbstracts = result.data.filter(a => a.status === 'approved');
+                console.log(`Found ${allAbstracts.length} approved abstracts`);
+                
+                // Debug: Log each abstract's schedule
+                allAbstracts.forEach((a, idx) => {
+                    console.log(`Abstract ${idx + 1}:`, {
+                        id: a.id,
+                        title: a.title,
+                        hasSchedule: !!a.schedule,
+                        schedule: a.schedule
+                    });
+                });
+                
+                filterAbstracts(currentFilter);
+            } else {
+                console.error('API Error:', result.message);
+                content.innerHTML = `<p style="color: #DC2626; text-align: center;">${result.message || 'Error loading abstracts'}</p>`;
+            }
+        } catch (error) {
+            console.error('Fetch error:', error);
+            content.innerHTML = `<p style="color: #DC2626; text-align: center;">Error: ${error.message}<br><br>Make sure the backend server is running on port 5000</p>`;
+        } finally {
+            loading.style.display = 'none';
+        }
+    }
+
+    function filterAbstracts(status) {
+        currentFilter = status;
+        
+        // Update active button
+        document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+        if (status === 'all') document.getElementById('filterAll').classList.add('active');
+        else if (status === 'scheduled') document.getElementById('filterScheduled').classList.add('active');
+        else if (status === 'unscheduled') document.getElementById('filterUnscheduled').classList.add('active');
+        
+        let filtered = allAbstracts;
+        if (status === 'scheduled') {
+            filtered = allAbstracts.filter(a => a.schedule && a.schedule.presentation_date);
+        } else if (status === 'unscheduled') {
+            filtered = allAbstracts.filter(a => !a.schedule || !a.schedule.presentation_date);
+        }
+
+        const content = document.getElementById('content');
+        
+        if (!filtered.length) {
+            content.innerHTML = `<p style="text-align: center; padding: 40px; color: #6B7280;">No ${status === 'all' ? 'approved' : status} abstracts found</p>`;
+            return;
+        }
+
+        content.innerHTML = `
+            <h2 class="card-title">
+                <i class="fas fa-calendar-check"></i> 
+                Approved Abstracts (${filtered.length})
+                <span style="font-size: 0.875rem; font-weight: normal; margin-left: auto;">
+                    <i class="fas fa-check-circle"></i> Payment Completed: ${filtered.filter(a => a.payment_completed).length}
+                </span>
+            </h2>
+            <div style="overflow-x: auto;">
+                <table style="width: 100%;">
+                    <thead>
+                        <tr style="background: #F9FAFB;">
+                            <th>Title</th>
+                            <th>Authors</th>
+                            <th>Payment</th>
+                            <th>Schedule Status</th>
+                            <th>Schedule Details</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${filtered.map(a => `
+                            <tr>
+                                <td><strong>${escapeHtml(a.title)}</strong></td>
+                                <td>${escapeHtml(a.authors || 'N/A')}</td>
+                                <td>
+                                    ${a.payment_completed ? 
+                                        '<span class="status-badge status-approved"><i class="fas fa-check-circle"></i> Paid</span>' : 
+                                        '<span class="status-badge status-pending"><i class="fas fa-clock"></i> Pending</span>'}
+                                </td>
+                                <td>
+                                    ${a.schedule && a.schedule.presentation_date ? 
+                                        '<span class="status-badge status-scheduled"><i class="fas fa-calendar-check"></i> Scheduled</span>' : 
+                                        '<span class="status-badge status-pending"><i class="fas fa-clock"></i> Not Scheduled</span>'}
+                                </td>
+                                <td>
+                                    ${a.schedule && a.schedule.presentation_date ? `
+                                        <div class="schedule-info">
+                                            <i class="fas fa-calendar-day"></i> ${new Date(a.schedule.presentation_date).toLocaleDateString()}<br>
+                                            <i class="fas fa-clock"></i> ${a.schedule.presentation_time || 'TBD'}<br>
+                                            <i class="fas fa-map-marker-alt"></i> ${escapeHtml(a.schedule.venue || 'TBD')}
+                                        </div>
+                                    ` : '<span style="color: #9CA3AF;">No schedule assigned</span>'}
+                                </td>
+                                <td>
+                                    <button onclick="openScheduleModal('${a.id}')" class="btn btn-primary btn-sm">
+                                        <i class="fas fa-calendar-plus"></i> ${a.schedule && a.schedule.presentation_date ? 'Edit Schedule' : 'Assign Slot'}
+                                    </button>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            </div>
+        `;
+    }
+
+    function openScheduleModal(abstractId) {
+        const abstract = allAbstracts.find(a => a.id == abstractId);
+        if (!abstract) return;
+        
+        document.getElementById('scheduleAbstractId').value = abstractId;
+        
+        // Pre-fill existing schedule if any
+        if (abstract.schedule && abstract.schedule.presentation_date) {
+            document.getElementById('presentationDate').value = abstract.schedule.presentation_date;
+            document.getElementById('presentationTime').value = abstract.schedule.presentation_time || '10:00';
+            document.getElementById('venue').value = abstract.schedule.venue || '';
+            document.getElementById('mode').value = abstract.schedule.mode || 'offline';
+            document.getElementById('meetingLink').value = abstract.schedule.meeting_link || '';
+        } else {
+            // Reset form
+            document.getElementById('scheduleForm').reset();
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            const mm = String(today.getMonth() + 1).padStart(2, '0');
+            const dd = String(today.getDate()).padStart(2, '0');
+            document.getElementById('presentationDate').value = `${yyyy}-${mm}-${dd}`;
+            document.getElementById('presentationTime').value = '10:00';
+            document.getElementById('venue').value = '';
+            document.getElementById('mode').value = 'offline';
+            document.getElementById('meetingLink').value = '';
+        }
+        
+        document.getElementById('scheduleModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('scheduleModal').style.display = 'none';
+        document.getElementById('scheduleForm').reset();
+    }
+
+    document.getElementById('scheduleForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const abstractId = document.getElementById('scheduleAbstractId').value;
+        const presentation_date = document.getElementById('presentationDate').value;
+        const presentation_time = document.getElementById('presentationTime').value;
+        const venue = document.getElementById('venue').value;
+        const mode = document.getElementById('mode').value;
+        const meeting_link = document.getElementById('meetingLink').value;
+        
+        if (!presentation_date || !presentation_time) {
+            showAlert('Please select both date and time', 'error');
+            return;
+        }
+        
+        const submitBtn = e.target.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="btn-spinner"></span> Saving...';
+        
+        try {
+            const requestBody = { 
+                presentation_date, 
+                presentation_time, 
+                venue, 
+                mode, 
+                meeting_link: meeting_link || null
+            };
+            
+            console.log('PUT Request to:', `${API_URL}/admin/abstracts/${abstractId}/schedule`);
+            console.log('Request body:', requestBody);
+            
+            const response = await fetch(`${API_URL}/admin/abstracts/${abstractId}/schedule`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify(requestBody)
+            });
+            
+            console.log('Response status:', response.status);
+            const data = await response.json();
+            console.log('Response data:', data);
+            
+            if (response.ok && data.success) {
+                showAlert('✅ Schedule assigned successfully!', 'success');
+                closeModal();
+                
+                // Manually update local data for immediate feedback
+                const updatedAbstract = allAbstracts.find(a => a.id == abstractId);
+                if (updatedAbstract) {
+                    updatedAbstract.schedule = {
+                        presentation_date: presentation_date,
+                        presentation_time: presentation_time,
+                        venue: venue,
+                        mode: mode,
+                        meeting_link: meeting_link || null
+                    };
+                    console.log('Manually updated abstract:', updatedAbstract);
+                }
+                
+                // Refresh display immediately
+                filterAbstracts(currentFilter);
+                
+                // Also reload from server to ensure consistency
+                setTimeout(() => {
+                    loadApprovedAbstracts();
+                }, 500);
+            } else {
+                showAlert(data.message || 'Failed to assign schedule', 'error');
+            }
+        } catch (error) {
+            console.error('Schedule error:', error);
+            showAlert('Server error: ' + error.message, 'error');
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalText;
+        }
+    });
+    
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            return m === '&' ? '&amp;' : m === '<' ? '&lt;' : '&gt;';
+        });
+    }
+    
+    // Close modal on outside click
+    window.onclick = function(event) {
+        const modal = document.getElementById('scheduleModal');
+        if (event.target === modal) {
+            closeModal();
+        }
+    }
+    
+    // Check if backend is reachable
+    async function checkBackend() {
+        try {
+            const res = await fetch(`${API_URL}/admin/abstracts`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            console.log('Backend reachable, status:', res.status);
+            if (res.status === 404) {
+                console.error('ERROR: API endpoint /api/admin/abstracts not found!');
+                showAlert('Backend route not configured. Please check your server routes.', 'error');
+            }
+        } catch (error) {
+            console.error('Backend not reachable:', error);
+            showAlert('Cannot connect to backend server. Make sure it\'s running on port 5000', 'error');
+        }
+    }
+    
+    loadApprovedAbstracts();
+    checkBackend();
+    </script>
+</body>
+</html>

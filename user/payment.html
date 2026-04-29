@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment - Sanskaram Conference</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0B3D91;
+            --accent: #FFD700;
+            --success: #10B981;
+            --danger: #EF4444;
+            --warning: #F59E0B;
+            --border: #E5E7EB;
+            --radius-lg: 12px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #F9FAFB;
+        }
+        .app-container { display: flex; min-height: 100vh; }
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, #0B3D91 0%, #1a1a4e 100%);
+            color: white;
+            padding: 32px;
+            position: fixed;
+            height: 100vh;
+        }
+        .sidebar-header { text-align: center; margin-bottom: 32px; padding-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.2); }
+        .sidebar-header h2 { font-size: 1.5rem; margin-top: 8px; }
+        .sidebar-nav { display: flex; flex-direction: column; gap: 8px; }
+        .nav-item {
+            padding: 12px 20px;
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .nav-item:hover, .nav-item.active { background: rgba(255,215,0,0.2); color: #FFD700; }
+        .main-content { flex: 1; margin-left: 280px; }
+        .top-bar {
+            background: white;
+            padding: 20px 40px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .card {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            margin: 32px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .card-title { font-size: 1.25rem; margin-bottom: 24px; display: flex; align-items: center; gap: 8px; }
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-success { background: var(--success); color: white; }
+        .btn-warning { background: var(--warning); color: white; }
+        .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+        .alert {
+            padding: 12px;
+            border-radius: 8px;
+            margin: 20px 32px 0 32px;
+            display: none;
+        }
+        .alert-success { background: #D1FAE5; color: #059669; border-left: 4px solid #059669; }
+        .alert-error { background: #FEE2E2; color: #DC2626; border-left: 4px solid #DC2626; }
+        .alert-info { background: #DBEAFE; color: #1E40AF; border-left: 4px solid #1E40AF; }
+        .alert-warning { background: #FEF3C7; color: #D97706; border-left: 4px solid #D97706; }
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .status-completed { background: #D1FAE5; color: #059669; }
+        .status-pending { background: #FEF3C7; color: #D97706; }
+        .logout-btn {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #fff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s linear infinite;
+            margin-right: 8px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .payment-summary {
+            background: linear-gradient(135deg, #0B3D91 0%, #3A7BD5 100%);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            color: white;
+            margin-bottom: 24px;
+        }
+        .info-box {
+            background: #F0FDF4;
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            margin-top: 20px;
+            border-left: 4px solid var(--success);
+        }
+        .status-steps {
+            margin-top: 24px;
+            padding: 16px;
+            background: #F3F4F6;
+            border-radius: 8px;
+        }
+        .step-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 0;
+        }
+        .step-completed { color: #10B981; }
+        .step-pending { color: #9CA3AF; }
+        .step-active { color: #F59E0B; }
+        .refresh-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-left: 16px;
+        }
+
+        /* Success Modal Styles */
+        .success-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 10000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(4px);
+        }
+        .success-modal-content {
+            background: white;
+            border-radius: 24px;
+            padding: 40px;
+            text-align: center;
+            max-width: 450px;
+            width: 90%;
+            animation: slideUp 0.4s ease;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #10B981, #059669);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            animation: scaleIn 0.5s ease;
+        }
+        .success-icon i {
+            font-size: 45px;
+            color: white;
+        }
+        .success-modal h2 {
+            color: #1F2937;
+            margin-bottom: 12px;
+            font-size: 24px;
+        }
+        .success-modal p {
+            color: #6B7280;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        .next-steps {
+            background: #F3F4F6;
+            padding: 20px;
+            border-radius: 16px;
+            margin: 20px 0;
+            text-align: left;
+        }
+        .next-steps h4 {
+            color: #374151;
+            margin-bottom: 12px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .next-steps ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .next-steps li {
+            padding: 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #4B5563;
+            font-size: 14px;
+        }
+        .next-steps li i {
+            color: #10B981;
+            width: 20px;
+            font-size: 14px;
+        }
+        .modal-btn-primary {
+            background: linear-gradient(135deg, #0B3D91, #1a1a4e);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s;
+            margin: 0 6px;
+        }
+        .modal-btn-secondary {
+            background: #E5E7EB;
+            color: #374151;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.3s;
+            margin: 0 6px;
+        }
+        .modal-btn-primary:hover, .modal-btn-secondary:hover {
+            transform: translateY(-2px);
+        }
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes scaleIn {
+            from { transform: scale(0); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-user-graduate" style="font-size: 32px; color: var(--accent);"></i>
+                <h2>Participant Panel</h2>
+                <p>Sanskaram Conference 2026</p>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                <a href="submit-abstract.html" class="nav-item"><i class="fas fa-file-alt"></i> Submit Abstract</a>
+                <a href="abstract-status.html" class="nav-item"><i class="fas fa-chart-line"></i> Abstract Status</a>
+                <a href="payment.html" class="nav-item active"><i class="fas fa-credit-card"></i> Payment</a>
+                <a href="my-schedule.html" class="nav-item"><i class="fas fa-calendar-alt"></i> My Schedule</a>
+            </nav>
+        </aside>
+        
+        <main class="main-content">
+            <div class="top-bar">
+                <h1><i class="fas fa-credit-card"></i> Payment & Registration</h1>
+                <div>
+                    <span id="userName" style="margin-right: 16px;"></span>
+                    <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                </div>
+            </div>
+            
+            <div id="alert" class="alert"></div>
+            <div id="content"></div>
+        </main>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="paymentSuccessModal" class="success-modal">
+        <div class="success-modal-content">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2>Payment Successful! 🎉</h2>
+            <p id="successMessage">Your registration is confirmed!</p>
+            <div class="next-steps">
+                <h4><i class="fas fa-clock"></i> What's Next?</h4>
+                <ul>
+                    <li><i class="fas fa-calendar-alt"></i> Admin will assign your presentation schedule</li>
+                    <li><i class="fas fa-envelope"></i> You'll be notified when schedule is ready</li>
+                    <li><i class="fas fa-chalkboard-user"></i> Check "My Schedule" page for updates</li>
+                </ul>
+            </div>
+            <div>
+                <button onclick="goToSchedule()" class="modal-btn-primary">
+                    <i class="fas fa-calendar-alt"></i> View My Schedule
+                </button>
+                <button onclick="goToDashboard()" class="modal-btn-secondary">
+                    <i class="fas fa-home"></i> Dashboard
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+    const API_URL = 'http://localhost:5000/api';
+    const token = localStorage.getItem('token');
+
+    if (!token) window.location.href = '../login.html';
+
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (!user || user.role !== 'user') window.location.href = '../login.html';
+
+    document.getElementById('userName').textContent = user.name || user.email;
+
+    function logout() {
+        localStorage.clear();
+        window.location.href = '../login.html';
+    }
+
+    function showAlert(message, type) {
+        const alertDiv = document.getElementById('alert');
+        alertDiv.style.display = 'block';
+        alertDiv.className = `alert alert-${type}`;
+        alertDiv.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-triangle' : 'info-circle'}"></i> ${message}`;
+        setTimeout(() => {
+            alertDiv.style.display = 'none';
+        }, 5000);
+    }
+
+    function showSuccessModal(message) {
+        const modal = document.getElementById('paymentSuccessModal');
+        const msgElement = document.getElementById('successMessage');
+        msgElement.textContent = message;
+        modal.style.display = 'flex';
+    }
+
+    function closeSuccessModal() {
+        const modal = document.getElementById('paymentSuccessModal');
+        modal.style.display = 'none';
+    }
+
+    function goToSchedule() {
+        closeSuccessModal();
+        window.location.href = 'my-schedule.html';
+    }
+
+    function goToDashboard() {
+        closeSuccessModal();
+        window.location.href = 'dashboard.html';
+    }
+
+    async function loadPaymentPage() {
+        const content = document.getElementById('content');
+        content.innerHTML = '<div style="text-align: center; padding: 40px;"><div class="spinner" style="width: 40px; height: 40px;"></div><p>Loading payment information...</p></div>';
+        
+        try {
+            // First check payment status
+            const statusRes = await fetch(`${API_URL}/payments/status`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            const statusData = await statusRes.json();
+            
+            console.log('Payment status response:', statusData);
+            
+            if (statusData.success && statusData.data.paymentCompleted) {
+                content.innerHTML = `
+                    <div class="card">
+                        <div style="text-align: center; padding: 40px;">
+                            <i class="fas fa-check-circle" style="font-size: 64px; color: #059669; margin-bottom: 16px;"></i>
+                            <h2>Payment Completed! ✅</h2>
+                            <p>Your registration is confirmed. You can now view your presentation schedule.</p>
+                            <div class="info-box">
+                                <p><i class="fas fa-calendar-alt"></i> <strong>Next Step:</strong></p>
+                                <p>Your presentation schedule will be assigned by the admin soon.</p>
+                            </div>
+                            <a href="my-schedule.html" class="btn btn-primary" style="margin-top: 24px;">
+                                <i class="fas fa-calendar-alt"></i> View My Schedule
+                            </a>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Check payment unlock status
+            const checkRes = await fetch(`${API_URL}/payments/check-status`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            const checkData = await checkRes.json();
+            
+            console.log('Check status response:', checkData);
+            
+            // Get abstract status for display
+            const abstractRes = await fetch(`${API_URL}/abstracts/my`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            const abstractData = await abstractRes.json();
+            const abstracts = abstractData.success ? abstractData.data : [];
+            const userAbstract = abstracts[0];
+            const abstractStatus = userAbstract?.status || 'pending';
+            
+            if (!checkData.canPay) {
+                let step1Class = 'step-pending';
+                let step2Class = 'step-pending';
+                let step3Class = 'step-pending';
+                let step4Class = 'step-pending';
+                
+                if (abstractStatus === 'approved') {
+                    step1Class = 'step-completed';
+                    step2Class = checkData.paymentUnlocked ? 'step-completed' : 'step-active';
+                } else if (abstractStatus === 'rejected') {
+                    step1Class = 'step-completed';
+                } else if (abstractStatus === 'pending') {
+                    step1Class = 'step-active';
+                }
+                
+                if (checkData.paymentUnlocked) step2Class = 'step-completed';
+                if (checkData.paymentCompleted) step3Class = 'step-completed';
+                
+                content.innerHTML = `
+                    <div class="card">
+                        <div style="text-align: center; padding: 20px;">
+                            <i class="fas fa-lock" style="font-size: 64px; color: #F59E0B; margin-bottom: 16px;"></i>
+                            <h2>Payment Gateway Status</h2>
+                            <p style="margin-top: 8px; color: #6B7280;">${checkData.message || 'Payment not available yet'}</p>
+                            
+                            <div class="status-steps">
+                                <h4 style="margin-bottom: 16px;"><i class="fas fa-chart-line"></i> Your Progress:</h4>
+                                <div class="step-item">
+                                    <i class="fas ${step1Class === 'step-completed' ? 'fa-check-circle step-completed' : (step1Class === 'step-active' ? 'fa-spinner fa-pulse step-active' : 'fa-circle step-pending')}"></i>
+                                    <span>Abstract Submitted & Reviewed</span>
+                                </div>
+                                <div class="step-item">
+                                    <i class="fas ${step2Class === 'step-completed' ? 'fa-check-circle step-completed' : (step2Class === 'step-active' ? 'fa-spinner fa-pulse step-active' : 'fa-circle step-pending')}"></i>
+                                    <span>Admin Approval & Payment Unlock</span>
+                                </div>
+                                <div class="step-item">
+                                    <i class="fas ${step3Class === 'step-completed' ? 'fa-check-circle step-completed' : 'fa-circle step-pending'}"></i>
+                                    <span>Payment Completion</span>
+                                </div>
+                                <div class="step-item">
+                                    <i class="fas ${step4Class === 'step-completed' ? 'fa-check-circle step-completed' : 'fa-circle step-pending'}"></i>
+                                    <span>Schedule Assignment</span>
+                                </div>
+                            </div>
+                            
+                            <div style="margin-top: 24px;">
+                                <button onclick="location.reload()" class="btn btn-primary">
+                                    <i class="fas fa-sync-alt"></i> Refresh Status
+                                </button>
+                                <a href="abstract-status.html" class="btn btn-warning" style="margin-left: 12px;">
+                                    <i class="fas fa-chart-line"></i> Check Abstract Status
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Show payment form if unlocked
+            content.innerHTML = `
+                <div class="card">
+                    <h2 class="card-title"><i class="fas fa-receipt"></i> Complete Your Registration</h2>
+                    
+                    <div class="payment-summary">
+                        <h3 style="color: var(--accent); margin-bottom: 16px;">Payment Summary</h3>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+                            <span>Conference Registration Fee</span>
+                            <span style="font-weight: 700;">₹1,000</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 12px;">
+                            <span style="font-weight: 700;">Total Amount</span>
+                            <span style="font-size: 1.5rem; font-weight: 800; color: var(--accent);">₹1,000</span>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; margin-bottom: 8px; font-weight: 600;">Select Payment Method</label>
+                        <select id="paymentMethod" style="width: 100%; padding: 12px; border: 2px solid var(--border); border-radius: 8px;">
+                            <option value="card">💳 Credit / Debit Card</option>
+                            <option value="upi">📱 UPI (Google Pay, PhonePe, etc.)</option>
+                            <option value="netbanking">🏦 Net Banking</option>
+                        </select>
+                    </div>
+                    
+                    <div class="info-box">
+                        <p><i class="fas fa-info-circle"></i> <strong>What happens after payment?</strong></p>
+                        <ul style="margin-top: 12px; margin-left: 20px;">
+                            <li>✅ Your registration will be confirmed</li>
+                            <li>✅ Admin will assign your presentation schedule</li>
+                            <li>✅ You'll be able to view your schedule in "My Schedule"</li>
+                        </ul>
+                    </div>
+                    
+                    <button onclick="processPayment()" class="btn btn-success" id="payBtn" style="width: 100%; margin-top: 20px;">
+                        <i class="fas fa-lock"></i> Pay ₹1,000 & Complete Registration
+                    </button>
+                </div>
+            `;
+        } catch (error) {
+            console.error('Load payment error:', error);
+            content.innerHTML = `<div class="card"><p style="color: #DC2626;">Error loading payment page. Please make sure backend is running.</p></div>`;
+        }
+    }
+    
+    async function processPayment() {
+        const payBtn = document.getElementById('payBtn');
+        
+        payBtn.disabled = true;
+        payBtn.innerHTML = '<span class="spinner"></span> Processing Payment...';
+        
+        try {
+            // Step 1: Create order
+            const orderRes = await fetch(`${API_URL}/payments/create-order`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify({ amount: 1000, currency: "INR" })
+            });
+            const orderData = await orderRes.json();
+            
+            if (!orderData.success) {
+                throw new Error(orderData.message);
+            }
+            
+            // Simulate payment processing
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            const mockPaymentId = 'PAY_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            
+            // Step 2: Verify payment
+            const verifyRes = await fetch(`${API_URL}/payments/verify`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    orderId: orderData.data.orderId,
+                    paymentId: mockPaymentId,
+                    amount: 1000
+                })
+            });
+            const verifyData = await verifyRes.json();
+            
+            if (verifyData.success) {
+                // Show beautiful success modal
+                showSuccessModal('Payment Successful! Your registration is confirmed.');
+            } else {
+                throw new Error(verifyData.message);
+            }
+        } catch (error) {
+            console.error('Payment error:', error);
+            showAlert('Payment failed: ' + error.message, 'error');
+            payBtn.disabled = false;
+            payBtn.innerHTML = '<i class="fas fa-lock"></i> Pay ₹1,000 & Complete Registration';
+        }
+    }
+    
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+        const modal = document.getElementById('paymentSuccessModal');
+        if (event.target === modal) {
+            closeSuccessModal();
+            window.location.href = 'my-schedule.html';
+        }
+    }
+    
+    // Auto-refresh every 30 seconds
+    setInterval(() => {
+        loadPaymentPage();
+    }, 30000);
+    
+    loadPaymentPage();
+    </script>
+</body>
+</html>

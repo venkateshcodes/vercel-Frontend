@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Participant</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0B3D91;
+            --accent: #FFD700;
+            --success: #10B981;
+            --danger: #EF4444;
+            --bg-light: #F3F4F6;
+            --border: #E5E7EB;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #F9FAFB;
+            color: #1F2937;
+        }
+        .app-container { display: flex; min-height: 100vh; }
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, #0B3D91 0%, #1a1a4e 100%);
+            color: white;
+            padding: 32px;
+            position: fixed;
+            height: 100vh;
+        }
+        .sidebar-header { text-align: center; margin-bottom: 32px; padding-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.2); }
+        .sidebar-header h2 { font-size: 1.5rem; margin-top: 8px; }
+        .sidebar-nav { display: flex; flex-direction: column; gap: 8px; }
+        .nav-item {
+            padding: 12px 20px;
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s;
+        }
+        .nav-item:hover, .nav-item.active { background: rgba(255,215,0,0.2); color: #FFD700; }
+        .main-content { flex: 1; margin-left: 280px; }
+        .top-bar {
+            background: white;
+            padding: 20px 40px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            padding: 40px;
+        }
+        .stat-card {
+            background: white;
+            padding: 32px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        .stat-card:hover { transform: translateY(-5px); }
+        .stat-card i { font-size: 2rem; color: var(--accent); margin-bottom: 16px; }
+        .stat-value { font-size: 2rem; font-weight: 700; color: var(--primary); }
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            margin: 0 40px 32px 40px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .card-title {
+            font-size: 1.25rem;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+        }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: #0a357a; transform: translateY(-2px); }
+        .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--primary); }
+        .btn-outline:hover { background: var(--primary); color: white; border-color: var(--primary); }
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .status-pending { background: #FEF3C7; color: #D97706; }
+        .status-approved { background: #D1FAE5; color: #059669; }
+        .status-rejected { background: #FEE2E2; color: #DC2626; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 16px; text-align: left; border-bottom: 1px solid var(--border); }
+        .logout-btn {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .logout-btn:hover { background: #dc2626; transform: translateY(-2px); }
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-user-graduate" style="font-size: 32px; color: var(--accent);"></i>
+                <h2>Participant Panel</h2>
+                <p>Sanskaram Conference 2026</p>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item active"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                <a href="submit-abstract.html" class="nav-item"><i class="fas fa-file-alt"></i> Submit Abstract</a>
+                <a href="abstract-status.html" class="nav-item"><i class="fas fa-chart-line"></i> Abstract Status</a>
+                <a href="payment.html" class="nav-item"><i class="fas fa-credit-card"></i> Payment</a>
+            </nav>
+        </aside>
+        
+        <main class="main-content">
+            <div class="top-bar">
+                <h1><i class="fas fa-chart-line"></i> Welcome, <span id="userName">Loading...</span></h1>
+                <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+            </div>
+            
+            <div id="loading" style="display: none; text-align: center; padding: 40px;">
+                <div class="spinner"></div>
+                <p>Loading dashboard...</p>
+            </div>
+            
+            <div id="stats" class="stats-grid"></div>
+            <div id="content"></div>
+        </main>
+    </div>
+    
+    <script>
+    const API_URL = 'http://localhost:5000/api';
+    const token = localStorage.getItem('token');
+
+    if (!token) window.location.href = '../login.html';
+
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (!user) window.location.href = '../login.html';
+
+    document.getElementById('userName').textContent = user.name || user.email;
+
+    function logout() {
+        localStorage.clear();
+        window.location.href = '../login.html';
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            return m === '&' ? '&amp;' : m === '<' ? '&lt;' : '&gt;';
+        });
+    }
+
+    async function loadDashboard() {
+        const loading = document.getElementById('loading');
+        loading.style.display = 'block';
+        
+        try {
+            console.log('Loading dashboard...');
+            const res = await fetch(`${API_URL}/abstracts/my`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            const result = await res.json();
+            console.log('Dashboard data:', result);
+            
+            // Handle both response structures
+            const data = result.success ? result.data : (result.data || []);
+            
+            // Count by status (using 'status' field from backend)
+            const pendingCount = data.filter(a => (a.status || 'pending') === 'pending').length;
+            const approvedCount = data.filter(a => a.status === 'approved').length;
+            const rejectedCount = data.filter(a => a.status === 'rejected').length;
+
+            document.getElementById('stats').innerHTML = `
+                <div class="stat-card"><i class="fas fa-file-alt"></i><div class="stat-value">${data.length}</div><div>Total Submissions</div></div>
+                <div class="stat-card"><i class="fas fa-clock"></i><div class="stat-value">${pendingCount}</div><div>Under Review</div></div>
+                <div class="stat-card"><i class="fas fa-check-circle"></i><div class="stat-value">${approvedCount}</div><div>Approved</div></div>
+                <div class="stat-card"><i class="fas fa-times-circle"></i><div class="stat-value">${rejectedCount}</div><div>Rejected</div></div>
+            `;
+
+            if (data.length === 0) {
+                document.getElementById('content').innerHTML = `
+                    <div class="card">
+                        <h2 class="card-title"><i class="fas fa-rocket"></i> Get Started</h2>
+                        <p>You haven't submitted any abstracts yet.</p>
+                        <a href="submit-abstract.html" class="btn btn-primary" style="margin-top: 16px;">Submit Your First Abstract →</a>
+                    </div>
+                `;
+            } else {
+                document.getElementById('content').innerHTML = `
+                    <div class="card">
+                        <h2 class="card-title"><i class="fas fa-history"></i> Your Recent Submissions</h2>
+                        <div style="overflow-x: auto;">
+                            <table>
+                                <thead>
+                                    <tr><th>Title</th><th>Status</th><th>Submitted</th><th>Action</th></tr>
+                                </thead>
+                                <tbody>
+                                    ${data.slice(0,5).map(a => `
+                                        <tr>
+                                            <td><strong>${escapeHtml(a.title)}</strong></td>
+                                            <td><span class="status-badge status-${a.status || 'pending'}">${(a.status || 'pending').toUpperCase()}</span></td>
+                                            <td>${a.submitted_at ? new Date(a.submitted_at).toLocaleDateString() : 'N/A'}</td>
+                                            <td><a href="abstract-status.html" class="btn btn-outline" style="padding: 4px 12px; font-size: 12px;">View</a></td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `;
+            }
+        } catch (error) {
+            console.error('Dashboard error:', error);
+            document.getElementById('content').innerHTML = `<div class="card"><p style="color: #DC2626;">Error loading dashboard: ${error.message}. Make sure backend is running.</p></div>`;
+        } finally {
+            loading.style.display = 'none';
+        }
+    }
+
+    loadDashboard();
+    </script>
+</body>
+</html>
